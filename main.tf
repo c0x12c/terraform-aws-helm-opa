@@ -7,23 +7,25 @@ resource "helm_release" "opa" {
   namespace        = var.namespace
   create_namespace = var.create_namespace
 
-  set {
-    name  = "image.repository"
-    value = "openpolicyagent/opa"
-  }
+  set = [
+    {
+      name  = "image.repository"
+      value = "openpolicyagent/opa"
+    },
+    {
+      name  = "image.tag"
+      value = var.opa_image_tag
+    },
+    {
+      name  = "containerPort"
+      value = "8181"
+    },
+  ]
 
-  set {
-    name  = "image.tag"
-    value = var.opa_image_tag
-  }
-
-  set {
-    name  = "containerPort"
-    value = 8181
-  }
-
-  set_list {
-    name  = "args"
-    value = ["run", "--ignore=.*", "--server", "--addr=:8181"]
-  }
+  set_list = [
+    {
+      name  = "args"
+      value = ["run", "--ignore=.*", "--server", "--addr=:8181"]
+    },
+  ]
 }
